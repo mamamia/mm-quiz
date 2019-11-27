@@ -1,6 +1,11 @@
 //TODO CLEAR the radio inputs after reusults are shown.
 var quizLength = 6;
-var answers = [["a", 0], ["b", 0], ["c", 0], ["d", 0]];
+var answers = [
+  ["a", 0],
+  ["b", 0],
+  ["c", 0],
+  ["d", 0]
+];
 
 function checkQuizDone(answers, quizLength) {
   var answerSum = 0;
@@ -59,38 +64,38 @@ $("input[type='radio']").on("change", function(e) {
 });
 
 //greensock
-var question = $(".question");
-// console.log(question[0]);
-var legend = $(".question-legend");
-var tl = new TimelineMax();
-//console.log(tl);
-$(".title").on("click", function() {
-  tl.to($(".title"), 1, { autoAlpha: 0, ease: Power1.easeOut }, 0)
-    .to($(".door-2"), 0.5, { x: "110%", ease: Power1.easeOut }, 1)
-    .to($(".door-1"), 0.5, { x: "-110%", ease: Power1.easeOut }, 1)
-    .to($(".questions"), 0.5, { autoAlpha: 1, ease: Power1.easeOut }, 1)
-    .staggerFrom(
-      $(".answer"),
-      0.5,
-      {
-        cycle: {
-          x: [650, -650],
-          autoAlpha: 1
-        },
-        ease: Power1.easeOut
-      },
-      0.25
-    );
-});
-// tl.staggerFrom(
-//   question,
-//   0.5,
-//   {
-//     cycle: {
-//       x: [600, -600]
-//     },
-//     ease: Power1.easeOut
-//   },
-//   0.25
-// ).from(legend, 0.5, { autoAlpha: 0, ease: Power1.easeNone });
-// .set(question[0], { className: "+=fill" });
+// var question = $(".question");
+// // console.log(question[0]);
+// var legend = $(".question-legend");
+// var tl = new TimelineMax();
+// //console.log(tl);
+// $(".title").on("click", function() {
+//   tl.to($(".title"), 1, { autoAlpha: 0, ease: Power1.easeOut }, 0)
+//     .to($(".door-2"), 0.5, { x: "110%", ease: Power1.easeOut }, 1)
+//     .to($(".door-1"), 0.5, { x: "-110%", ease: Power1.easeOut }, 1)
+//     .to($(".questions"), 0.5, { autoAlpha: 1, ease: Power1.easeOut }, 1)
+//     .staggerFrom(
+//       $(".answer"),
+//       0.5,
+//       {
+//         cycle: {
+//           x: [650, -650],
+//           autoAlpha: 1
+//         },
+//         ease: Power1.easeOut
+//       },
+//       0.25
+//     );
+// });
+// // tl.staggerFrom(
+// //   question,
+// //   0.5,
+// //   {
+// //     cycle: {
+// //       x: [600, -600]
+// //     },
+// //     ease: Power1.easeOut
+// //   },
+// //   0.25
+// // ).from(legend, 0.5, { autoAlpha: 0, ease: Power1.easeNone });
+// // .set(question[0], { className: "+=fill" });
