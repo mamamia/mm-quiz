@@ -1,4 +1,6 @@
 //TODO CLEAR the radio inputs after reusults are shown.
+// Remove jQuery when converting to component
+
 var quizLength = 6;
 var answers = [
   ["a", 0],
@@ -45,7 +47,35 @@ function showResults(answers, quizLength) {
     return;
   }
   var results = checkAnswers(answers);
-  document.querySelector(".results-" + results).classList.add("is-visible");
+  document.querySelector(".result-" + results).classList.add("is-visible");
+  document.querySelector(".button-reset").classList.add("is-visible");
+  document.querySelector(".questions").classList.add("is-hidden");
+  document.querySelector(".hero-image").classList.add("is-hidden");
+  document.querySelector(".button-next").classList.add("is-hidden");
+}
+
+function resetQuiz(answers) {
+  var results = checkAnswers(answers);
+  var allRadioButtons = document.querySelectorAll('input[type="radio"');
+
+  for (var i = 0; i < allRadioButtons.length; i++) {
+    allRadioButtons[i].checked = false;
+  }
+
+  document.querySelector(".result-" + results).classList.remove("is-visible");
+  document.querySelector(".button-reset").classList.remove("is-visible");
+  document.querySelector(".questions").classList.remove("is-hidden");
+  document.querySelector(".hero-image").classList.remove("is-hidden");
+  document.querySelector(".button-next").classList.remove("is-hidden");
+
+  for (var i = 0; i < answers.length; i++) {
+    answers[i][1] = 0;
+  }
+  // console.log("RESET", answers);
+}
+
+function previousQuestion() {
+  console.log("go to previous question");
 }
 
 $("input[type='radio']").on("change", function(e) {
@@ -61,6 +91,10 @@ $("input[type='radio']").on("change", function(e) {
   question.setAttribute("data-selected", answer);
   showResults(answers, quizLength);
   console.log(answers);
+});
+
+$(".button-reset").on("click", function() {
+  resetQuiz(answers);
 });
 
 //greensock
