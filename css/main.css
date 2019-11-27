@@ -139,14 +139,15 @@ img {
   object-fit: cover;
 }
 
-main,
+.questions,
+.result-content,
 footer {
   border-left: 6px solid #c9f9ff;
   border-right: 6px solid #c9f9ff;
 }
 
 main {
-  border-top: 6px solid #c9f9ff;
+  position: relative;
 }
 
 footer {
@@ -156,21 +157,31 @@ footer {
 
 input[type="radio"] {
   visibility: hidden;
+  position: absolute;
+}
+
+input[type="radio"]:checked + span {
+  background: #2974db;
 }
 
 label {
   display: flex;
   margin-bottom: 1.5rem;
+  position: relative;
 }
 
 a {
   color: #000;
 }
-.pink-line {
-  background: #ffade1;
-  height: 0.25rem;
-  width: 100%;
+
+header {
+  border-bottom: 0.25rem solid #ffade1;
   margin-bottom: 1.5em;
+}
+
+.questions,
+.result-content {
+  border-top: 6px solid #c9f9ff;
 }
 
 .question {
@@ -193,6 +204,7 @@ a {
   color: #fff;
   border-radius: 0.25rem;
   font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .answer-button {
@@ -239,21 +251,36 @@ footer img {
 }
 
 .result {
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  background: #fff;
+}
+
+.result-content {
   padding: 1.1875rem 1.5rem;
   font-size: 0.75rem;
   line-height: 1rem;
 }
 
-.result p {
+.result-content p {
   margin: 0;
 }
-.result img {
+.result-content img {
   border: 3px solid #ebebeb;
   border-radius: 50%;
   max-width: 205px;
   max-height: 205px;
   margin: 1.375em auto;
   margin: 0.625em auto;
+  display: block;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.is-visible {
   display: block;
 }
 
@@ -362,7 +389,7 @@ footer img {
   body,
   footer p,
   .question-count,
-  .result {
+  .result-content {
     font-size: 1rem;
   }
 
@@ -389,12 +416,12 @@ footer img {
     height: 200px;
   }
 
-  .result {
+  .result-content {
     line-height: 1.375;
     padding: 2.3125em 2.0625em;
   }
 
-  .result img {
+  .result-content img {
     margin: 1.375em auto;
   }
 }
