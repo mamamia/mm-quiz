@@ -47,11 +47,11 @@ function showResults(answers, quizLength) {
     return;
   }
   var results = checkAnswers(answers);
-  document.querySelector(".result-" + results).classList.add("is-visible");
-  document.querySelector(".button-reset").classList.add("is-visible");
-  document.querySelector(".questions").classList.add("is-hidden");
-  document.querySelector(".hero-image").classList.add("is-hidden");
-  document.querySelector(".button-next").classList.add("is-hidden");
+  // document.querySelector(".result-" + results).classList.add("is-visible");
+  // document.querySelector(".button-reset").classList.add("is-visible");
+  // document.querySelector(".questions").classList.add("is-hidden");
+  // document.querySelector(".hero-image").classList.add("is-hidden");
+  // document.querySelector(".button-prev").classList.add("is-hidden");
 }
 
 function resetQuiz(answers) {
@@ -62,74 +62,91 @@ function resetQuiz(answers) {
     allRadioButtons[i].checked = false;
   }
 
-  document.querySelector(".result-" + results).classList.remove("is-visible");
-  document.querySelector(".button-reset").classList.remove("is-visible");
-  document.querySelector(".questions").classList.remove("is-hidden");
-  document.querySelector(".hero-image").classList.remove("is-hidden");
-  document.querySelector(".button-next").classList.remove("is-hidden");
+  var questions = document.querySelectorAll(".question");
+  var allAnswer = document.querySelectorAll(".answer");
+
+  timeline["gsap"]
+    .to(allAnswer, { duration: 0, x: 0 })
+    .to(questions, {
+      duration: 0,
+      x: "0"
+    })
+    .to(".result-" + results, { duration: 0.5, opacity: 0, zIndex: 0 })
+    .to(".button-reset", { duration: 0.5, opacity: 0, zIndex: 0 })
+    .to(".questions", { duration: 0.5, opacity: 1 })
+    .to(".hero-image", { duration: 0.5, opacity: 1 });
 
   for (var i = 0; i < answers.length; i++) {
     answers[i][1] = 0;
   }
-  // console.log("RESET", answers);
 }
 
-function previousQuestion() {
-  console.log("go to previous question");
-}
-
-$("input[type='radio']").on("change", function(e) {
-  var el = e.target;
-  var answer = parseInt(el.value);
-  var question = el.closest("fieldset");
-
-  if (question.getAttribute("data-selected")) {
-    answers[question.getAttribute("data-selected")][1] -= 1;
-  }
-
-  answers[answer][1] += 1;
-  question.setAttribute("data-selected", answer);
-  showResults(answers, quizLength);
-  console.log(answers);
-});
-
-$(".button-reset").on("click", function() {
+var resetButton = document.querySelector(".button-reset");
+resetButton.addEventListener("click", function(event) {
   resetQuiz(answers);
 });
 
-//greensock
-// var question = $(".question");
-// // console.log(question[0]);
-// var legend = $(".question-legend");
-// var tl = new TimelineMax();
-// //console.log(tl);
-// $(".title").on("click", function() {
-//   tl.to($(".title"), 1, { autoAlpha: 0, ease: Power1.easeOut }, 0)
-//     .to($(".door-2"), 0.5, { x: "110%", ease: Power1.easeOut }, 1)
-//     .to($(".door-1"), 0.5, { x: "-110%", ease: Power1.easeOut }, 1)
-//     .to($(".questions"), 0.5, { autoAlpha: 1, ease: Power1.easeOut }, 1)
-//     .staggerFrom(
-//       $(".answer"),
-//       0.5,
-//       {
-//         cycle: {
-//           x: [650, -650],
-//           autoAlpha: 1
-//         },
-//         ease: Power1.easeOut
-//       },
-//       0.25
-//     );
-// });
-// // tl.staggerFrom(
-// //   question,
-// //   0.5,
-// //   {
-// //     cycle: {
-// //       x: [600, -600]
-// //     },
-// //     ease: Power1.easeOut
-// //   },
-// //   0.25
-// // ).from(legend, 0.5, { autoAlpha: 0, ease: Power1.easeNone });
-// // .set(question[0], { className: "+=fill" });
+var prevButton = document.querySelector(".button-prev");
+prevButton.addEventListener("click", function(event) {
+  timeline["gsap"].reverse();
+});
+
+var allRadioInputs = document.querySelectorAll("input[type='radio']");
+allRadioInputs.forEach(function(input) {
+  input.addEventListener("click", function(event) {
+    var el = event.target;
+    var answer = parseInt(el.value);
+    var question = el.closest("fieldset");
+
+    if (question.getAttribute("data-selected")) {
+      answers[question.getAttribute("data-selected")][1] -= 1;
+    }
+
+    answers[answer][1] += 1;
+    question.setAttribute("data-selected", answer);
+    showResults(answers, quizLength);
+  });
+});
+
+var timeline = [];
+var allInputs = document.querySelectorAll("input[type='radio']");
+allInputs.forEach(function(input, index) {
+  input.addEventListener("click", function(event) {
+    var selected = event.target;
+    var selectedParent = selected.parentElement;
+    var selectedName = selected.getAttribute("name");
+    var quizNumber = selectedName.split("-")[1];
+    var allLabels = document.querySelectorAll(
+      '[data-label="' + selectedName + '"]'
+    );
+    var questions = document.querySelectorAll(".question");
+
+    var labels = [];
+    allLabels.forEach(function(el) {
+      if (el === selectedParent) {
+        console.log("MATCH", el, selectedParent);
+        return;
+      }
+      labels.push(el);
+    });
+
+    timeline["gsap"] = gsap.timeline();
+    if (quizNumber != questions.length) {
+      timeline["gsap"]
+        .to(labels, { duration: 1, x: "-120%", stagger: 0.2 }, selectedName)
+        .to(questions, {
+          duration: 1,
+          x: "-" + quizNumber * 100 + "%"
+        });
+    } else {
+      var results = checkAnswers(answers);
+      timeline["gsap"]
+        .to(".questions", { duration: 0.5, opacity: 0 }, 0)
+        .to(".hero-image", { duration: 0.5, opacity: 0 }, 0)
+        .to(".result-" + results, { duration: 0.5, opacity: 1, zIndex: 1 }, 0.5)
+        .to(".button-reset", { duration: 0.5, opacity: 1, zIndex: 1 }, 0.5);
+      console.log("end");
+    }
+    console.log(timeline);
+  });
+});

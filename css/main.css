@@ -179,6 +179,13 @@ header {
   margin-bottom: 1.5em;
 }
 
+.questions {
+  display: flex;
+  overflow-x: hidden;
+  z-index: 1;
+  position: relative;
+}
+
 .questions,
 .result-content {
   border-top: 6px solid #c9f9ff;
@@ -186,6 +193,7 @@ header {
 
 .question {
   padding: 1.375rem 1.375rem 0;
+  flex: 1 0 100%;
 }
 
 .question-legend {
@@ -205,6 +213,7 @@ header {
   border-radius: 0.25rem;
   font-size: 1.5rem;
   cursor: pointer;
+  position: relative;
 }
 
 .answer-button {
@@ -215,18 +224,18 @@ header {
   justify-content: center;
   align-items: center;
   margin-right: 0.625rem;
-  position: relative;
   top: 0.1rem;
 }
 
-.button-next {
+.button-prev,
+.button-reset {
   width: 100%;
   height: 3.125rem;
   text-transform: uppercase;
   margin-bottom: 1.375rem;
 }
 
-.button-next span:before {
+.button-prev span:before {
   content: "";
   display: inline-block;
   background-image: url("/img/arrow.svg");
@@ -251,9 +260,9 @@ footer img {
 }
 
 .result {
-  /* position: absolute;
+  position: absolute;
   top: 0;
-  left: 0; */
+  left: 0;
   background: #fff;
 }
 
@@ -277,7 +286,7 @@ footer img {
 }
 
 .is-hidden {
-  display: none;
+  opacity: 0;
 }
 
 .is-visible {
@@ -407,7 +416,7 @@ footer img {
     margin-right: 1rem;
   }
 
-  .button-next {
+  .button-prev {
     margin-bottom: 1.6875rem;
   }
 
