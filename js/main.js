@@ -41,7 +41,7 @@ function checkAnswers(answers) {
 
 function resetQuiz(answers) {
   var results = checkAnswers(answers);
-  var allRadioButtons = document.querySelectorAll('input[type="radio"');
+  var allRadioButtons = document.querySelectorAll('input[type="radio"]');
 
   for (var i = 0; i < allRadioButtons.length; i++) {
     allRadioButtons[i].checked = false;
