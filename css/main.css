@@ -252,7 +252,7 @@ header {
 .button-prev span:before {
   content: "";
   display: inline-block;
-  background-image: url("/img/arrow.svg");
+  background-image: url("../img/arrow.svg");
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
   width: 20px;
