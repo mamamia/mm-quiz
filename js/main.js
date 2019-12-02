@@ -50,15 +50,18 @@ function resetQuiz(answers) {
   var questions = document.querySelectorAll(".question");
   var allAnswer = document.querySelectorAll(".answer");
   timeline["gsap"]
-    .to(allAnswer, { duration: 0, x: 0 })
-    .to(questions, {
-      duration: 0,
+    .set(allAnswer, { x: 0 })
+    .set(questions, {
       x: "0"
     })
     .to(".result-" + results, { duration: 0.5, opacity: 0, zIndex: 0 })
-    .to(".questions", { duration: 0.5, opacity: 1 }, 1)
-    .to(".hero-image", { duration: 0.5, opacity: 1 }, 1)
-    .to("footer", { duration: 0.5, opacity: 1 }, 1);
+    .to(
+      [".questions", ".hero-image", "footer"],
+      { duration: 0.5, opacity: 1 },
+      1
+    );
+  // .to(".hero-image", { duration: 0.5, opacity: 1 }, 1)
+  // .to("footer", { duration: 0.5, opacity: 1 }, 1);
 
   for (var i = 0; i < answers.length; i++) {
     answers[i][1] = 0;
@@ -118,11 +121,14 @@ allRadioInputs.forEach(function(input) {
     } else {
       var results = checkAnswers(answers);
       timeline["gsap"]
-        .to("footer", { duration: 0, opacity: 0 }, 0)
-        .to(".questions", { duration: 0.5, opacity: 0 }, 0)
-        .to(".hero-image", { duration: 0.5, opacity: 0 }, 0)
-        .to(".result-" + results, { duration: 0.5, opacity: 1, zIndex: 1 }, 0.5)
-        .to(".button-reset", { duration: 0.5, opacity: 1, zIndex: 1 }, 0.5);
+        .set("footer", { opacity: 0 }, 0)
+        .to([".questions", ".hero-image"], { duration: 0.5, opacity: 0 }, 0)
+        .to(
+          [".result-" + results, ".button-reset"],
+          { duration: 0.5, opacity: 1, zIndex: 1 },
+          0.5
+        );
+      // .to(".button-reset", { duration: 0.5, opacity: 1, zIndex: 1 }, 0.5);
     }
   });
 });
