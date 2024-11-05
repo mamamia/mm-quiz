@@ -1,40 +1,41 @@
 var quizLength = 6;
-var answers = [
-  ["a", 0],
-  ["b", 0],
-  ["c", 0],
-  ["d", 0]
-];
+var answers = {
+  a: 0,
+  b: 0,
+  c: 0,
+  d: 0,
+  e: 0,
+  f: 0,
+  g: 0,
+  h: 0,
+};
+var answered = 0;
 var timeline = [];
 
 function checkQuizDone(answers, quizLength) {
-  var answerSum = 0;
-  for (var i = 0; i < answers.length; i++) {
-    answerSum += answers[i][1];
-  }
-  return answerSum === quizLength ? true : false;
+  return quizLength === answered ? true : false;
 }
 
 function checkAnswers(answers) {
+  //check the answers and return the one witht the highest value. if there are multiple answers with the same value, pick one at random.
   var results = "";
-  var currentAnswer = 0;
-
-  for (var i = 0; i < answers.length; i++) {
-    var answer = answers[i][1];
-    var answerKey = answers[i][0];
-
-    if (answer === currentAnswer) {
-      var coinToss = Math.floor(Math.random() * 2);
-      if (coinToss === 1) {
-        currentAnswer = answer;
-        results = answerKey;
-      }
-    } else {
-      if (answer > currentAnswer) {
-        currentAnswer = answer;
-        results = answerKey;
-      }
+  var highestValue = 0;
+  var highestValueKey = [];
+  var answerKeys = Object.keys(answers);
+  answerKeys.forEach((key) => {
+    if (answers[key] > highestValue) {
+      highestValue = answers[key];
+      highestValueKey = [key];
+    } else if (answers[key] === highestValue) {
+      highestValueKey.push(key);
     }
+  });
+  // if there are multiple answers with the same value, pick one at random.
+  if (highestValueKey.length > 1) {
+    results =
+      highestValueKey[Math.floor(Math.random() * highestValueKey.length)];
+  } else {
+    results = highestValueKey[0];
   }
   return results;
 }
@@ -52,7 +53,7 @@ function resetQuiz(answers) {
   timeline["gsap"]
     .set(allAnswer, { x: 0 })
     .set(questions, {
-      x: "0"
+      x: "0",
     })
     .to(".result-" + results, { duration: 0.5, opacity: 0, zIndex: 0 })
     .to(
@@ -63,36 +64,50 @@ function resetQuiz(answers) {
   // .to(".hero-image", { duration: 0.5, opacity: 1 }, 1)
   // .to("footer", { duration: 0.5, opacity: 1 }, 1);
 
-  for (var i = 0; i < answers.length; i++) {
-    answers[i][1] = 0;
+  var answerKeys = Object.keys(answers);
+  for (var i = 0; i < answerKeys.length; i++) {
+    answers[answerKeys[i]] = 0;
   }
 }
 
 var resetButton = document.querySelectorAll(".button-reset");
-resetButton.forEach(function(rbutton) {
-  rbutton.addEventListener("click", function(event) {
+resetButton.forEach(function (rbutton) {
+  rbutton.addEventListener("click", function (event) {
     resetQuiz(answers);
   });
 });
 
 var prevButton = document.querySelector(".button-prev");
-prevButton.addEventListener("click", function(event) {
+prevButton.addEventListener("click", function (event) {
   timeline["gsap"].reverse();
 });
 
 var allRadioInputs = document.querySelectorAll("input[type='radio']");
-allRadioInputs.forEach(function(input) {
-  input.addEventListener("click", function(event) {
-    var selected = event.target;
-    var answer = parseInt(selected.value);
+allRadioInputs.forEach((input) => {
+  input.addEventListener("change", function (event) {
+    console.log("input change", this.value);
+    var selected = this;
+    var answer = this.value;
     var question = selected.closest("fieldset");
 
     if (question.getAttribute("data-selected")) {
-      answers[question.getAttribute("data-selected")][1] -= 1;
+      const dataSelected = question.getAttribute("data-selected");
+      for (let i = 0; i < dataSelected.length; i++) {
+        if (dataSelected[i] > 0) {
+          answers[dataSelected[i]] -= 1;
+        }
+      }
+      if (answered > 0) answered -= 1;
+      question.removeAttribute("data-selected");
     }
 
-    answers[answer][1] += 1;
     question.setAttribute("data-selected", answer);
+    if (answered < quizLength) {
+      answered += 1;
+    }
+    for (let i = 0; i < answer.length; i++) {
+      answers[answer[i]] += 1;
+    }
 
     var selectedParent = selected.parentElement;
     var selectedName = selected.getAttribute("name");
@@ -103,7 +118,7 @@ allRadioInputs.forEach(function(input) {
     var questions = document.querySelectorAll(".question");
 
     var labels = [];
-    allLabels.forEach(function(el) {
+    allLabels.forEach(function (el) {
       if (el === selectedParent) {
         return;
       }
@@ -116,7 +131,7 @@ allRadioInputs.forEach(function(input) {
         .to(labels, { duration: 1, x: "-120%", stagger: 0.2 }, selectedName)
         .to(questions, {
           duration: 1,
-          x: "-" + quizNumber * 100 + "%"
+          x: "-" + quizNumber * 100 + "%",
         });
     } else {
       var results = checkAnswers(answers);
